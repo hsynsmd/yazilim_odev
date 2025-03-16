@@ -1,0 +1,39 @@
+import pandas as pd
+
+s=pd.Series([10,20,30,40],index=["a","b","c","d"])
+#pd.Series() fonksiyonu ile bir Pandas Series nesnesi oluşturuyoruz.
+#Series, tek boyutlu bir veri yapısıdır (Liste gibi ama indeksleri özelleştirilebilir).
+print(s)
+
+
+data={
+      "Fiyat":[45,85,45,25],
+      "Satış Adedi":[5,6,7,2],
+      "Kategori":["Roman","Bilim","Çocuk","Tarih"]
+      }
+#data adlı bir sözlük (dictionary) oluşturuyoruz.
+#Daha sonra pd.DataFrame(data) ile bu sözlükten bir DataFrame (Tablo) oluşturuyoruz.
+df=pd.DataFrame(data)
+print(df)
+
+#Series tek boyutlu bir veri yapısıdır ve özelleştirilmiş indeksler alabilir.
+#DataFrame, sütunlar halinde organize edilmiş çok boyutlu bir veri yapısıdır.
+
+print(df.head())
+
+print(df.info())
+
+print(df.describe())
+
+print(df[["Fiyat","Kategori"]])
+
+filtre=df[df["Fiyat"]>50]
+print(filtre)
+
+
+df["Toplam Gelir"]=df["Fiyat"]*df["Satış Adedi"]
+print(df)
+
+
+df=df.drop("Kategori",axis=1)
+print(df)

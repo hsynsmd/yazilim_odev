@@ -37,3 +37,4 @@ print(df)
 
 df=df.drop("Kategori",axis=1)
 print(df)
+dersler devam edecek

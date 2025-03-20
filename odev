@@ -1,40 +1,59 @@
-import pandas as pd
+# -*- coding: utf-8 -*-
+"""
+Bu Python programı, Pandas kütüphanesi kullanılarak veri analizi işlemleri yapmaktadır.
+Pandas Series ve DataFrame veri yapıları oluşturulup, üzerinde çeşitli işlemler uygulanmaktadır.
+"""
 
-s=pd.Series([10,20,30,40],index=["a","b","c","d"])
-#pd.Series() fonksiyonu ile bir Pandas Series nesnesi oluşturuyoruz.
-#Series, tek boyutlu bir veri yapısıdır (Liste gibi ama indeksleri özelleştirilebilir).
-print(s)
+# Gerekli kütüphaneyi içe aktarıyoruz
+import pandas as pd  
 
+# --- Pandas Series Kullanımı ---
+# Tek boyutlu bir veri yapısı olan Pandas Series oluşturuyoruz
+s = pd.Series([10, 20, 30, 40], index=["a", "b", "c", "d"])
+# Series, listeye benzer ancak her değere özel indeks atanabilir.
+print("Pandas Series:\n", s)  # Oluşturulan Series'i ekrana yazdırıyoruz.
 
-data={
-      "Fiyat":[45,85,45,25],
-      "Satış Adedi":[5,6,7,2],
-      "Kategori":["Roman","Bilim","Çocuk","Tarih"]
-      }
-#data adlı bir sözlük (dictionary) oluşturuyoruz.
-#Daha sonra pd.DataFrame(data) ile bu sözlükten bir DataFrame (Tablo) oluşturuyoruz.
-df=pd.DataFrame(data)
-print(df)
+# --- Pandas DataFrame Kullanımı ---
+# Sözlük (dictionary) veri yapısı ile bir veri çerçevesi (DataFrame) oluşturuyoruz.
+data = {
+    "Fiyat": [45, 85, 45, 25],  # Ürün fiyatlarını içeren bir sütun
+    "Satış Adedi": [5, 6, 7, 2],  # Her ürünün kaç kez satıldığını gösteren sütun
+    "Kategori": ["Roman", "Bilim", "Çocuk", "Tarih"]  # Ürün kategorileri
+}
 
-#Series tek boyutlu bir veri yapısıdır ve özelleştirilmiş indeksler alabilir.
-#DataFrame, sütunlar halinde organize edilmiş çok boyutlu bir veri yapısıdır.
+# Dictionary'den bir DataFrame oluşturuyoruz.
+df = pd.DataFrame(data)
 
-print(df.head())
+# Oluşturulan DataFrame'i ekrana yazdırıyoruz.
+print("\nOluşturulan DataFrame:\n", df)
 
-print(df.info())
+# --- DataFrame hakkında bilgi alma işlemleri ---
+# DataFrame'in ilk 5 satırını görüntüleyelim (bu durumda 4 satır olduğu için tümü gelir).
+print("\nDataFrame'in İlk Satırları:\n", df.head())
 
-print(df.describe())
+# DataFrame'in yapısı hakkında bilgi almak için info() fonksiyonunu kullanıyoruz.
+print("\nDataFrame Bilgileri:\n")
+print(df.info())  # Sütun adları, veri tipleri ve eksik veri olup olmadığı gösterilir.
 
-print(df[["Fiyat","Kategori"]])
+# DataFrame içindeki sayısal değerler için istatistiksel özet alıyoruz.
+print("\nİstatistiksel Özet:\n", df.describe())
 
-filtre=df[df["Fiyat"]>50]
-print(filtre)
+# --- Belirli Sütunları Seçme ---
+# Sadece "Fiyat" ve "Kategori" sütunlarını içeren bir alt tablo oluşturuyoruz.
+print("\nFiyat ve Kategori Sütunları:\n", df[["Fiyat", "Kategori"]])
 
+# --- Filtreleme İşlemi ---
+# "Fiyat" değeri 50'den büyük olan satırları filtreleyelim.
+filtre = df[df["Fiyat"] > 50]  
+print("\nFiyatı 50'den Büyük Olan Ürünler:\n", filtre)
 
-df["Toplam Gelir"]=df["Fiyat"]*df["Satış Adedi"]
-print(df)
+# --- Yeni Bir Sütun Ekleme ---
+# "Toplam Gelir" adlı yeni bir sütun ekliyoruz. (Fiyat * Satış Adedi)
+df["Toplam Gelir"] = df["Fiyat"] * df["Satış Adedi"]
+print("\nToplam Gelir Sütunu Eklenmiş DataFrame:\n", df)
 
+# --- Sütun Silme İşlemi ---
+# "Kategori" sütununu DataFrame'den kaldırıyoruz.
+df = df.drop("Kategori", axis=1)  # axis=1 sütun silmek için kullanılır.
+print("\nKategori Sütunu Silinmiş DataFrame:\n", df)
 
-df=df.drop("Kategori",axis=1)
-print(df)
-dersler devam edecek

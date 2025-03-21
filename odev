@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+Ders1--
 """
 Bu Python programı, Pandas kütüphanesi kullanılarak veri analizi işlemleri yapmaktadır.
 Pandas Series ve DataFrame veri yapıları oluşturulup, üzerinde çeşitli işlemler uygulanmaktadır.
@@ -29,18 +29,19 @@ print("\nOluşturulan DataFrame:\n", df)
 
 # --- DataFrame hakkında bilgi alma işlemleri ---
 # DataFrame'in ilk 5 satırını görüntüleyelim (bu durumda 4 satır olduğu için tümü gelir).
-print("\nDataFrame'in İlk Satırları:\n", df.head())
+print("\nDataFrame'in İlk Satırları:\n", df.head())#head içine ne yazarsak o sayıda satır getirir.mesela head(3) olursa 3 satır getirir
 
 # DataFrame'in yapısı hakkında bilgi almak için info() fonksiyonunu kullanıyoruz.
 print("\nDataFrame Bilgileri:\n")
-print(df.info())  # Sütun adları, veri tipleri ve eksik veri olup olmadığı gösterilir.
+print(df.info())  # Sütun adları, veri tipleri,Bellekte kapladığı yeri hesaplar ve eksik veri olup olmadığı gösterilir.
 
-# DataFrame içindeki sayısal değerler için istatistiksel özet alıyoruz.
+# DataFrame içindeki sayısal değerler için istatistiksel özet alıyoruz.Sayısal sütunlar için temel istatistikleri hesaplar (mean, std, min, max, percentiles vb.).
 print("\nİstatistiksel Özet:\n", df.describe())
 
 # --- Belirli Sütunları Seçme ---
 # Sadece "Fiyat" ve "Kategori" sütunlarını içeren bir alt tablo oluşturuyoruz.
-print("\nFiyat ve Kategori Sütunları:\n", df[["Fiyat", "Kategori"]])
+print("\nFiyat ve Kategori Sütunları:\n", df[["Fiyat", "Kategori"]])#Birden fazla sütun seçmek için çift köşeli parantez kullanmamız gerekir:
+
 
 # --- Filtreleme İşlemi ---
 # "Fiyat" değeri 50'den büyük olan satırları filtreleyelim.
@@ -54,46 +55,181 @@ print("\nToplam Gelir Sütunu Eklenmiş DataFrame:\n", df)
 
 # --- Sütun Silme İşlemi ---
 # "Kategori" sütununu DataFrame'den kaldırıyoruz.
-df = df.drop("Kategori", axis=1)  # axis=1 sütun silmek için kullanılır.
+df = df.drop("Kategori", axis=1)  # axis=1 sütun silmek için kullanılır.axis=0 olsaydı satır silmek için olurdu
 print("\nKategori Sütunu Silinmiş DataFrame:\n", df)
 
 
+"""df.head()	İlk 5 satırı gösterir
+df.tail()	Son 5 satırı gösterir
+df.info()	DataFrame hakkında genel bilgileri gösterir
+df.describe()	Sayısal sütunlar için istatistiksel özet çıkarır
+df.shape	Satır ve sütun sayısını gösterir"""
 
+Ders2--
 
+#pip install openpyxl yaptık
+# Pandas kütüphanesini içe aktarıyoruz.
+# Bu kütüphane veri analizi yapmak, tablo şeklindeki verileri yönetmek ve işlemler gerçekleştirmek için kullanılır.
 import pandas as pd
 
-#excel dosyasını oku
+# Bir Excel dosyasından veriyi okuyoruz ve bir Pandas DataFrame'e yüklüyoruz.
+# 'teknolojik_urunler.xlsx' dosyasının bulunduğu dizinde olmalısın, aksi halde hata alırsın.
 df = pd.read_excel('teknolojik_urunler.xlsx')
-# eksik_veriler = df.isnull()
-# print(eksik_veriler)
-# temiz_df = df.dropna()
-# print(temiz_df)
-# doldurulmus_df = df.fillna("Değer Yok")
-# print(doldurulmus_df)
-# df['Fiyat (TL)'] = df['Fiyat (TL)'].astype('float')
-# df.insert(2, 'Yeni Sütun', range(1,21))
-# print(df.head())
-# df.to_excel('toexcel.xlsx', index=False)
-# print("Veri kayıt edildi!")
-# df_düsük = df.sort_values(by='Fiyat (TL)', ascending=False)
-# print(df_düsük)
-# df_fiyat_ust = df[df['Fiyat (TL)']  > 5000]
-# print(df_fiyat_ust)
 
-# df_filtreli = df[(df['Fiyat (TL)'] > 5000) & (df['Kategori'] == 'Bilgisayarlar')]
-# print(df_filtreli)
-# df_secili = df.loc[:,['Ürün Adı', 'Fiyat (TL)']]
-# print(df_secili)
-#index numarasına göre seçer
-# df_ilk = df.iloc[:12,:]
-# print(df_ilk)
-#SQL tarzı sorgulama
+#ilk bir kaç satırı oku
+print(df.head())
+print(df)
 
-# df_sorgu = df.query('Satış > 3')
-# print(df_sorgu)
 
-df_kategoriler = df[df['Kategori'].isin(['Televizyonlar','Mobil Cihazlar'])]
-print(df_kategoriler)
+# ------------------------- ORTALAMA FİYAT HESAPLAMA -------------------------
 
+# DataFrame'de bulunan "Fiyat (TL)" sütununun ortalama (mean) değerini hesaplıyoruz.
+# .mean() metodu, sütundaki tüm sayıların toplamını alıp, kaç tane değer varsa ona bölerek ortalamayı hesaplar.
+ortalama_fiyat = df['Fiyat (TL)'].mean()
+
+# Hesaplanan ortalama fiyatı ekrana yazdırıyoruz.
+# f-string kullanarak değişkeni string içine gömüyoruz.
+print(f"Ortalama Fiyat : {ortalama_fiyat} TL")
+
+
+# ------------------------- EN ÇOK GELİR GETİREN ÜRÜNÜ SIRALAMA -------------------------
+
+# DataFrame'deki ürünleri kategori bazında gruplayarak toplam satışlarını hesaplıyoruz.
+# .groupby('Kategori') → Aynı kategoriye sahip ürünleri gruplar.
+# ['Satış'] → "Satış" sütununu seçer.
+# .sum() → Aynı kategoriye ait satışları toplar.
+kategori_bazli_satis = df.groupby('Kategori')['Satış'].sum()
+print(f"Kategori Bazlı Satışlar:\n{kategori_bazli_satis}")
+#Köşeli parantez [] → DataFrame veya Series içinden sütun/satır seçmek için kullanılır.
+#Normal parantez () → Bir fonksiyon veya metod çağırmak için kullanılır.
+
+
+
+# ------------------------- EN ÇOK GELİR GETİREN ÜRÜNÜ BULMA -------------------------
+
+# En çok gelir getiren ürünü buluyoruz.
+# .loc[] → DataFrame’de belirli bir satırı seçmek için kullanılır.
+# .idxmax() → Belirtilen sütundaki en yüksek değere sahip satırın indeksini döndürür.
+max_gelir = df.loc[df['Toplam Fiyat (TL)'].idxmax()]
+print(f"En çok gelir getiren ürün: {max_gelir}")
+
+
+# ------------------------- BELİRLİ FİYAT ÜSTÜ ÜRÜNLERİ SEÇME -------------------------
+
+# "Fiyat (TL)" sütununda 4000 TL'nin üzerinde olan ürünleri filtreliyoruz.
+# df[df['Fiyat (TL)'] > 4000] → DataFrame’den sadece fiyatı 4000’den büyük olan satırları alır.
+fiyat_ust_urunler = df[df['Fiyat (TL)'] > 4000]
+print("Fiyatı 4000 TL'nin üzerinde olan ürünler:")
+print(fiyat_ust_urunler)
+
+
+# ------------------------- EXCEL'E KAYDETME -------------------------
+
+# Filtrelenen ürünleri yeni bir Excel dosyasına kaydediyoruz.
+# .to_excel() → DataFrame’i Excel formatında dışa aktarmak için kullanılır.
+# index=False → Excel dosyasına yazarken DataFrame’in indeksini eklememek için kullanılır.
+fiyat_ust_urunler.to_excel('fiyati_4000_ustu_olanlar.xlsx', index=False)
+
+
+# ------------------------- BELİRLİ BİR SÜTUN SEÇME -------------------------
+
+# "Ürün Adı" sütununu seçiyoruz ve ayrı bir değişkene atıyoruz.
+# df['Ürün Adı'] → DataFrame’den sadece "Ürün Adı" sütununu alır.
+urun_adi = df['Ürün Adı']
+print(urun_adi)
+
+
+Ders3--
+
+# 📌 Pandas kütüphanesini içe aktarıyoruz.
+# Pandas, veri analizi yapmak ve Excel, CSV gibi dosyaları okumak için kullanılır.
+import pandas as pd
+
+# ------------------------- EXCEL DOSYASINI OKUMA -------------------------
+
+# 📌 Bir Excel dosyasından veriyi okuyoruz ve bir Pandas DataFrame'e yüklüyoruz.
+# 'teknolojik_urunler1.xlsx' dosyasının bulunduğu dizinde olmalısın, aksi halde hata alırsın.
+df = pd.read_excel('teknolojik_urunler1.xlsx')
+
+# ------------------------- EKSİK VERİLERİ BULMA -------------------------
+
+# 📌 DataFrame içinde eksik (NaN) değerleri bulmak için .isnull() metodunu kullanıyoruz.
+# Bu metod, her hücre için True (eksik veri) veya False (eksik değil) olacak şekilde bir DataFrame oluşturur.
+#eksik_veriler = df.isnull()
+
+# 📌 Eksik verileri ekrana yazdırıyoruz.
+#print(eksik_veriler)
+
+# ------------------------- EKSİK VERİLERİ TEMİZLEME (NA DEĞERLERİ SİLME) -------------------------
+
+# 📌 .dropna() metodunu kullanarak eksik (NaN) değeri içeren tüm satırları siliyoruz.
+# Eğer bir satırda herhangi bir hücre NaN (eksik) ise, o satır tamamen kaldırılır.
+#temiz_df = df.dropna()
+
+# 📌 Eksik veriler silindikten sonra oluşan yeni DataFrame'i ekrana yazdırıyoruz.
+#print(temiz_df)
+
+# ------------------------- EKSİK VERİLERİ DOLDURMA (YORUMA ALINMIŞ KISIM) -------------------------
+
+# 📌 Eğer eksik verileri silmek yerine belirli bir değerle doldurmak istiyorsak .fillna() metodunu kullanabiliriz.
+# Burada eksik değerlerin yerine "Değer Yok" ifadesini koyuyoruz.
+
+#doldurulmus_df = df.fillna("Değer Yok")
+#print(doldurulmus_df)
+
+# 📌 Eğer eksik veriler için özel bir değeri tercih ediyorsan, yukarıdaki satırın yorumunu kaldırarak kullanabilirsin.
+
+# ------------------------- VERİ TİPİNİ DÖNÜŞTÜRME (YORUMA ALINMIŞ KISIM) -------------------------
+
+# 📌 Eğer "Fiyat(TL)" sütunu yanlışlıkla string (metin) türünde saklanıyorsa, onu float (ondalıklı sayı) formatına çevirebiliriz.
+# .astype('float') metodu, belirtilen sütunun veri tipini değiştirir.
+
+#df['Fiyat (TL)'] = df['Fiyat (TL)'].astype('float')
+#print(df.dtypes)
+
+# 📌 Eğer yukarıdaki kodu çalıştırırken hata alırsan, sütunun içinde sayılar yerine metin olup olmadığını kontrol etmelisin.
+# Eğer sütunda virgüllü sayılar varsa (örn: "1.000,50"), önce `df['Fiyat(TL)'] = df['Fiyat(TL)'].str.replace(",", ".").astype(float)` gibi bir dönüştürme yapmalısın.
+
+# ------------------------- YENİ SÜTUN EKLEME (YORUMA ALINMIŞ KISIM) -------------------------
+
+# 📌 insert() metoduyla DataFrame'e yeni bir sütun ekleyebiliriz.
+# İlk parametre (2), sütunun kaçıncı sütun olarak ekleneceğini belirtir.
+# "Yeni Sütun" adıyla, 1'den 20'ye kadar sayılar içeren bir sütun ekliyoruz.
+
+df.insert(loc=2, column='Yeni Sütun', value=range(1, len(df) + 1))
+
+# 📌 Yeni eklenen sütunun sonucunu görmek için df.head() kullanarak ilk 5 satırı yazdırıyoruz.
+
+print(df.head())
+print(df.columns.tolist())  # Sütun isimlerini liste halinde yazdır
+print(df)  # DataFrame’in tamamını yazdır
+
+
+# 📌 Eğer yukarıdaki kodu çalıştırırken hata alırsan, DataFrame'deki satır sayısını kontrol etmelisin.
+# `range(1,21)`, 20 satırlık bir veri oluşturur. Eğer DataFrame'inde 20 satırdan az veya fazla satır varsa, `range(1, len(df) + 1)` kullanabilirsin.
+
+# ------------------------- VERİYİ EXCEL DOSYASINA KAYDETME -------------------------
+
+# 📌 .to_excel() metodunu kullanarak DataFrame’i yeni bir Excel dosyasına kaydediyoruz.
+# 'toexcel.xlsx' adlı yeni bir dosya oluşturulur ve DataFrame içindeki veriler buraya yazılır.
+# index=False → DataFrame'in index sütununun (varsayılan 0,1,2,3...) Excel dosyasına kaydedilmesini engeller.
+df.to_excel('toexcel.xlsx', index=False)
+
+# 📌 Kullanıcıya veri kaydının tamamlandığını bildiren bir mesaj yazdırıyoruz.
+print("Veri kayıt edildi")
+
+# ------------------------- VERİLERİ SIRALAMA (BÜYÜKTEN KÜÇÜĞE) -------------------------
+
+# 📌 .sort_values() metodunu kullanarak "Fiyat(TL)" sütununa göre sıralama yapıyoruz.
+# `ascending=False` → Sıralamayı büyükten küçüğe yapar (en pahalı ürün en üstte olur).
+df_düsük = df.sort_values(by='Fiyat (TL)', ascending=False)
+
+# 📌 Sıralanmış veriyi ekrana yazdırıyoruz.
+print(df_düsük)
+
+# 📌 Eğer fiyatları küçükten büyüğe sıralamak istersen `ascending=True` kullanmalısın.
+# Örneğin:
+df_yüksel = df.sort_values(by='Fiyat (TL)', ascending=True)
+print(df_yüksel)
 
 

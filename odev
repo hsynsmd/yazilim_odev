@@ -233,3 +233,80 @@ df_yüksel = df.sort_values(by='Fiyat (TL)', ascending=True)
 print(df_yüksel)
 
 
+
+
+#Ders4--
+# 📌 1. Filtreleme: Hem fiyatı 5000 TL'den büyük olan hem de kategorisi "Bilgisayarlar" olan ürünleri seçiyoruz.
+
+# df[...] → DataFrame üzerinde koşullu filtreleme yapar.
+# (df['Fiyat (TL)'] > 5000) → "Fiyat (TL)" sütununda 5000 TL'den büyük değerleri kontrol eder.
+# (df['Kategori'] == 'Bilgisayarlar') → Kategorisi tam olarak "Bilgisayarlar" olanları kontrol eder.
+# & → İki koşulun **ve** (AND) operatörüdür. İki koşul da sağlanmalı.
+# Parantez içinde yazmamız gerekir, yoksa hata alırız!
+
+df_filtre = df[(df['Fiyat (TL)'] > 5000) & (df['Kategori'] == 'Bilgisayarlar')]
+
+# 📌 Sonuç: Koşulları sağlayan ürünleri yazdır.
+print(df_filtre)
+
+
+
+# 📌 2. Belirli Sütunları Seçme: "Ürün Adı" ve "Fiyat (TL)" sütunlarını seçiyoruz.
+
+# df.loc[:, ['Ürün Adı', 'Fiyat (TL)']] → loc[] hem satır hem sütun seçmeye yarar.
+# İlk kısım (:) → tüm satırları ifade eder.
+# İkinci kısım ['Ürün Adı', 'Fiyat (TL)'] → yalnızca bu iki sütunu alır.
+
+df_secili = df.loc[:, ['Ürün Adı', 'Fiyat (TL)']]
+
+# 📌 Sonuç: Sadece bu iki sütunu içeren alt tabloyu yazdır.
+print(df_secili)
+
+
+
+# 📌 3. İlk 5 Satırı ve Tüm Sütunları Seçme
+
+# df.iloc[:5, :] → iloc[] metodu, satır ve sütunları **indeks (sayısal sıra)** ile seçer.
+# :5 → 0'dan başlayarak 5'e kadar (0, 1, 2, 3, 4) ilk 5 satırı alır.
+# : → tüm sütunları seç demektir.
+
+df_ilk = df.iloc[:5, :]
+
+# 📌 Sonuç: İlk 5 satırlık veriyi gösterir.
+print(df_ilk)
+
+
+
+# 📌 4. .query() ile Koşullu Seçim: "Fiyat (TL)" değeri 5000'den büyük olanları filtreliyoruz.
+
+# .query() fonksiyonu, SQL benzeri bir sözdizimiyle filtreleme yapar.
+# Sütun adında boşluk veya özel karakter varsa, ` (backtick) içinde yazmamız gerekir.
+
+df_sorgu = df.query('`Fiyat (TL)` > 5000')
+
+# 📌 Sonuç: Fiyatı 5000'den büyük olan ürünleri göster.
+print(df_sorgu)
+
+
+
+# 📌 5. .query() ile başka bir koşullu seçim: "Satış" değeri 5'ten büyük olan ürünler.
+
+# Burada sütun adı sade olduğu için backtick (`) kullanmamıza gerek yok.
+# Bu filtre, yalnızca "Satış" sayısı 5'ten büyük olan satırları getirir.
+
+df_sorgu = df.query('Satış > 5')
+
+# 📌 Sonuç: Satış sayısı 5'in üzerinde olan ürünler listelenir.
+print(df_sorgu)
+
+
+
+# 📌 6. isin() ile Birden Fazla Kategoriye Göre Filtreleme
+
+# df['Kategori'].isin([...]) → "Kategori" sütunu belirtilen değerlerden birine eşitse True döner.
+# Yani kategori "Bilgisayarlar" veya "Mobil Cihazlar" olan satırları filtrelemiş oluyoruz.
+
+df_kategoriler = df[df['Kategori'].isin(['Bilgisayarlar', 'Mobil Cihazlar'])]
+
+# 📌 Sonuç: Sadece istenen iki kategoriye ait satırlar gösterilir.
+print(df_kategoriler)

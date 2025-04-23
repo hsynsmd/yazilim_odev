@@ -368,7 +368,7 @@ print(satis_ust_gruplar[['Kategori','Ürün Adı','Satış','Fiyat (TL)']])
 
 #x['Satış'].sum() > 50: Bu grup içindeki toplam satış 50’den büyükse geçer, değilse elener.
 
-#✅ Sonuç: Sadece toplam satışı 50’nin üzerinde olan kategorilerdeki ürünleri 
+#✅ Sonuç: Sadece toplam satışı 50’nin üzerinde olan kategorilerdeki ürünleri alırız.
 
 
 

@@ -312,6 +312,64 @@ df_kategoriler = df[df['Kategori'].isin(['Bilgisayarlar', 'Mobil Cihazlar'])]
 print(df_kategoriler)
 
 
+--------------------------------------------
+
+import pandas as pd
+#excel dosyasını oku
+df = pd.read_excel('teknolojik_urunler.xlsx')
+
+gruplar = df.groupby('Kategori')
+
+toplam_satis = df.groupby('Kategori')['Satış'].sum()
+print(toplam_satis)
+#Her kategori grubundaki “Satış” sütunundaki değerlerin toplamını verir.
+#Örn: “Telefon” kategorisindeki tüm satışların toplamı kaç? gibi.
+
+toplam_satis_fiyat = df.groupby('Kategori')['Fiyat (TL)'].sum()
+print(toplam_satis_fiyat)
+#Kategorilere göre tüm ürünlerin fiyatlarının toplamını verir (toplam fiyat).
+
+# ortalama_satis_fiyati = df.groupby('Kategori')['Fiyat (TL)'].mean()
+#Kategorilere göre ürünlerin ortalama fiyatını verir (ortalama fiyat).
+
+
+
+toplam_ve_ortalama = df.groupby('Kategori').agg(
+     {
+        'Satış':'sum',
+        'Fiyat (TL)': 'mean'
+    })
+print(toplam_ve_ortalama)
+
+#.agg(): Birden fazla istatistiksel işlemi aynı anda yapmanı sağlar.
+
+#'Satış': 'mean': Her kategori için satışların ortalamasını al.
+
+#'Fiyat (TL)': 'mean': Aynı şekilde fiyatların ortalamasını da al.
+
+
+
+en_pahali_urun = df.loc[df.groupby('Kategori')['Fiyat (TL)'].idxmax()]
+print(en_pahali_urun)
+
+#groupby('Kategori'): Grupluyoruz yine.
+#['Fiyat (TL)'].idxmax(): Her grupta (kategori) en yüksek fiyatın satır indeksini buluyoruz.
+#df.loc[...]: Bu indekslere karşılık gelen ürünleri çekiyoruz. ✅ Sonuç: Her kategorideki en pahalı ürünü bulur.
+
+
+
+satis_ust_gruplar = df.groupby('Kategori').filter(lambda x: x['Satış'].sum() > 50)
+print(satis_ust_gruplar[['Kategori','Ürün Adı','Satış','Fiyat (TL)']])
+#df.groupby('Kategori'): Kategorilere göre ürünleri grupla.
+
+#.filter(...): Gruplar üzerinde filtreleme yap.
+
+#lambda x: x burada her bir grubu temsil eder.
+
+#x['Satış'].sum() > 50: Bu grup içindeki toplam satış 50’den büyükse geçer, değilse elener.
+
+#✅ Sonuç: Sadece toplam satışı 50’nin üzerinde olan kategorilerdeki ürünleri alırız.
+
 
 
 
@@ -335,8 +393,5 @@ while abs (f1)>1e-10:
 
 """
 
-dersler devam edecek
-2gündür hastayım yapcak bişi yok 
-projeler bakılıyor
 
 

@@ -439,3 +439,13 @@ tahmini_fiyat = model.predict([[ev_buyuklugu]])
 print(f"Bu evin tahmini fiyatı : {tahmini_fiyat[0]:.2f} TL")
 
 
+from ultralytics import YOLO
+
+if __name__ == '__main__':
+    model = YOLO('yolov8n.pt')
+    model.train(
+        data="C:/Users/ASUS/Desktop/yoloveriseti/Gun with webcam views.v1i.yolov8/data.yaml",
+        epochs=50,
+        imgsz=640,
+        device=0
+    )

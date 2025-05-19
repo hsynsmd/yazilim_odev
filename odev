@@ -370,6 +370,26 @@ print(satis_ust_gruplar[['Kategori','Ürün Adı','Satış','Fiyat (TL)']])
 
 #✅ Sonuç: Sadece toplam satışı 50’nin üzerinde olan kategorilerdeki ürünleri alırız.
 
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+
+#y = mx + b
+
+df=pd.read_csv('Student.csv')
+#print(df)
+print(df.head(3))
+
+y=df[["Marks"]]
+x=df[["number_courses","time_study"]]
+print(df.info())
+
+l=LinearRegression()
+model=l.fit(x,y)  #fit ,training öğrenme demek
+print(model.predict([[3,2]]))
+
+print(df["Marks"].max())
+
+print(model.score(x,y))
 
 
 

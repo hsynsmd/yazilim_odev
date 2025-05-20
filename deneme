@@ -1,0 +1,47 @@
+# main.py
+# Proje: SmartVisionAssist - Görme Engelliler İçin Akıllı Nesne Tanıma ve Sesli Uyarı Sistemi
+# Açıklama:
+# Bu kod, bir videodan alınan görüntülerde nesne algılaması yapar.
+# Arabalar, insanlar, yollar, merdivenler gibi nesneleri tespit eder.
+# Algılanan nesnelere göre sesli uyarı verir ve tehlike durumlarında alarm çalar.
+
+# --- Kütüphane İçe Aktarımları ---
+import cv2
+import time
+import threading
+from core.detector import ObjectDetector
+from core.speaker import speak, currently_speaking,clear_queue
+from core.alarm import play_alarm
+from core.utils import calculate_distance, determine_position, REAL_WIDTHS
+from core.logic import classify_object, generate_warning_text
+
+speak_lock = threading.Lock()
+
+# --- Başlangıç Ayarları ---
+model_path = "models/my_model.pt"  # Kullanılacak YOLOv8 modelinin yolu
+video_path = "videos/video.mp4"    # Kullanılacak video dosyasının yolu
+
+detector = ObjectDetector(model_path)  # Nesne algılayıcı başlat
+url = "http://192.168.1.40:4747/video"
+cap = cv2.VideoCapture(video_path)
+ # Video kaynağını başlat
+paused = False  # Başlangıçta video oynuyor
+
+
+speech_enabled = True  # Sesli bildirimler açık
+fps = cap.get(cv2.CAP_PROP_FPS)  # Video FPS bilgisi
+skip_seconds = 5  # Fast-forward/backward süresi
+frame = None  # Güncel video karesi
+threshold = 0.5  # Mesafe değişim eşiği (0.5 metre)
+
+# --- Son Algı Bilgileri ---
+last_detected_text = None
+last_spoken_time = 0
+last_warn_time=0
+last_label = None
+last_position = None
+last_distance = None
+draw_lines = False  # 9 bölge çizgilerini aç/kapat
+
+# TODO: Şu an konuşmalar sıraya alınmadan gönderiliyor. İleride öncelik bazlı konuşma sistemi kurulabilir.
+# TODO: bir konuşma oluyor sonra diğeri olmuyor ses kısmında sıkıntı var önceliklendirme cart curt bişiler yapılamlı ben yapamadım.
